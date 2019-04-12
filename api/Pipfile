@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+graphene = "*"
+sqlalchemy = "*"
+graphene-sqlalchemy = "*"
+dependency-injector = "*"
+mysql-connector-python = "*"
+pyjwt = "*"
+requests = "*"
+alembic = "*"
+bcrypt = "*"
+marshmallow = "*"
+
+[dev-packages]
+flask = "*"
+flask-cors = "*"
+pep8 = "*"
+pydevd = "*"
+
+[requires]
+python_version = "3.6"

@@ -1,0 +1,45 @@
+---
+#
+# Global setup
+#
+Customer: "moddix"
+Project: "foosball"
+Environment: "test"
+Region: "eu-west-1"
+Azs: ["eu-west-1a","eu-west-1b"]
+AzsString: "eu-west-1a,eu-west-1b"
+
+GlobalBaseName: "{{ Customer }}-{{ Project }}"
+ResourceBaseName: "{{ GlobalBaseName }}-{{ Environment }}"
+
+#
+# Database settings
+#
+DbCluster: "{{ ResourceBaseName }}-aurora"
+DbName: "MainDB"
+DbUser: "master"
+DbPassword: ""
+DbMinCapacity: "2"
+DbMaxCapacity: "2"
+DbPauseTimeout: "1000"
+DbAutoPause: "true"
+
+#
+# Results from rds creation
+#
+RdsSubnetGroup: "{{ lookup('cloudformation', 'region={{ Region }}', 'stack={{ ResourceBaseName }}-aurora', 'output=RdsSubnet', 'profile={{ Customer }}') }}"
+RdsHostname: "{{ lookup('cloudformation', 'region={{ Region }}', 'stack={{ ResourceBaseName }}-aurora', 'output=ClusterEndpoint', 'profile={{ Customer }}') }}"
+
+#
+# S3 settings
+#
+UploadBucketName: "{{ ResourceBaseName }}-upload"
+WebBucketName: "{{ ResourceBaseName }}-web"
+DefaultRootObject: "index.html"
+DefaultErrorObject: "index.html"
+
+#
+# API settings
+#
+ApiGraphqlMemory: "128"
+HttpLambdaTimeout: 29

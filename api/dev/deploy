@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Set environment variables
+STACK_NAME=${STACK_NAME:-checkout}
+STACK_ENV=${STACK_ENV:-dev}
+STACK=${STACK_NAME}-${STACK_ENV}
+AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-eu-west-3}
+DB_INSTANCE=${DB_NAME:-checkout}-${STACK_ENV}
+
+# Get database endpoint
+DB_HOST=$(sls resolveAwsKey --k aws:rds:${DB_INSTANCE}:Endpoint.Address)
+
+# Get AWS Lambda API endpoint and set variable
+echo "Fetching service endpoint..."
+API_ENDPOINT=$(aws cloudformation describe-stacks \
+                --stack-name ${STACK} \
+                --query \
+                "Stacks[0].Outputs[?OutputKey=='ServiceEndpoint'].OutputValue" \
+                --output text)
+echo "Service endpoint: ${API_ENDPOINT}"
+
+# Deploy serverless stack
+echo "Deploying serverless stack..."
+API_ENDPOINT=$API_ENDPOINT sls deploy \
+  --service ${STACK_NAME} \
+  --stage ${STACK_ENV} \
+  --region ${AWS_DEFAULT_REGION}
+
+# Deploy again if database endpoint has not been resolved
+if [[ $DB_HOST = *"null"* ]]
+then
+    echo "Redeploying serverless stack to resolve database endpoint..."
+    sls deploy \
+    --service ${STACK_NAME} \
+    --stage ${STACK_ENV} \
+    --region ${AWS_DEFAULT_REGION}
+    echo $(sls resolveAwsKey --k aws:rds:${DB_INSTANCE}:Endpoint.Address)
+else
+    echo ${DB_HOST}
+    echo "Database endpoint already resolved. No need to redeploy."
+fi
+
+echo "Deployment complete."

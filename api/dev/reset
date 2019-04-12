@@ -1,0 +1,5 @@
+#!/usr/bin/env /bin/sh
+
+dev/stop
+docker volume rm test-api_db
+dev/init

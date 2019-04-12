@@ -1,0 +1,84 @@
+#!/bin/sh
+
+COMMAND=$1
+TYPE=${2:-local}
+STACK_ENV=${STACK_ENV:-dev}
+DB_INSTANCE=${DB_NAME:-checkout}-${STACK_ENV}
+
+if [ -z "$COMMAND" ]
+then
+	printf "Usage dev/db [command] [[args]]\n"
+	printf "Commands:\n"
+	printf "\tmigrate - Drop all tables and re-create them based on the latest schema\n"
+	exit 0;
+fi
+
+# ---- Migrate ----
+if [ "$COMMAND" == "migrate" ]
+then
+	# Local database
+	if [ "$TYPE" = "local" ]
+	then
+		echo "Migrating local database..."
+		dev/compose run --rm app python -m database.migrate
+		echo "Migration complete."
+		exit 0;
+	fi
+	# AWS database
+	if [ "$TYPE" = "aws" ]
+	then
+		# Get database endpoint
+    	DB_HOST=$(sls resolveAwsKey --k aws:rds:${DB_INSTANCE}:Endpoint.Address)
+		# Verify host exists
+		if [[ $DB_HOST = *"null"* ]]
+		then
+			echo "Database $DB_INSTANCE not found."
+		else
+			# DB_HOST=${DB_HOST:18:-6}
+			DB_HOST=`echo "$DB_HOST" | cut -d'"' -f 2`
+			echo "Migrating aws database..."
+			echo $DB_HOST
+			dev/compose run --rm -e DB_HOST=$DB_HOST -e DB_USER=$3 -e DB_PASS=$4 app python -m database.migrate
+			echo "Migration complete."
+		fi
+		exit 0;
+	fi
+	printf "Please specify a type: local, aws\n"
+	exit 1;
+fi
+
+# ---- Seed ----
+if [ "$COMMAND" == "seed" ]
+then
+	# Local database
+	if [ "$TYPE" = "local" ]
+	then
+		echo "Seeding local database..."
+		dev/compose run --rm app python -m database.seed
+		echo "Seeding complete."
+		exit 0;
+	fi
+	# AWS database
+	if [ "$TYPE" = "aws" ]
+	then
+		# Get database endpoint
+		DB_HOST=$(sls resolveAwsKey --k aws:rds:${DB_INSTANCE}:Endpoint.Address)
+		# Verify host exists
+		if [[ $DB_HOST = *"null"* ]]
+		then
+			echo "Database $DB_INSTANCE not found."
+		else
+			DB_HOST=`echo "$DB_HOST" | cut -d'"' -f 2`
+			echo "Seeding database..."
+			echo $DB_HOST
+			docker-compose run --rm -e DB_HOST=$DB_HOST -e DB_USER=$3 -e DB_PASS=$4 app python -m database.seed
+			echo "Seeding complete."
+    	fi
+		exit 0;
+	fi
+	printf "Please specify a type: local, aws\n"
+	exit 1;
+fi
+
+printf "Command '${COMMAND}' is not implemented\n"
+exit 1;

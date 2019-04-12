@@ -1,0 +1,109 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Runtime: python3.6
+    Environment:
+      Variables:
+        ENV: {{ Environment }}
+        DB_HOST: {{ RdsHostname }}
+        DB_PORT: 3306
+        DB_NAME: {{ DbName }}
+        DB_USERNAME: {{ DbUser }}
+        DB_PASSWORD: {{ DbPassword }}
+
+Resources:
+  LambdaGraphQLRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action: sts:AssumeRole
+      Path: /
+      Policies: # TODO change policies so it doesn't have access to all resources / actions
+        - PolicyName: AmazonECSTaskRolePolicy
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                - 'rds:DescribeDBInstances'
+                - 'rds:DescribeDBSecurityGroups'
+                - 's3:*'
+                - 'lambda:*'
+                - 'iam:*'
+                - "logs:CreateLogGroup"
+                - "logs:CreateLogStream"
+                - "logs:PutLogEvents"
+              Resource: '*'
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: {{ Environment }}
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+      DefinitionBody:
+        swagger: 2.0
+        info:
+          title:
+            Ref: AWS::StackName
+        paths:
+          /graphql:
+            post:
+              produces:
+              - application/json
+              responses:
+                '200':
+                  description: 200 response
+                  schema:
+                    $ref: "#/definitions/Empty"
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                passthroughBehavior: when_no_match
+                responses:
+                  default:
+                    statusCode: 200
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGraphQL.Arn}/invocations
+            get:
+              produces:
+              - application/json
+              responses:
+                '200':
+                  description: 200 response
+                  schema:
+                    $ref: "#/definitions/Empty"
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: GET
+                passthroughBehavior: when_no_match
+                responses:
+                  default:
+                    statusCode: 200
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGraphQL.Arn}/invocations
+  LambdaGraphQL:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !GetAtt LambdaGraphQLRole.Arn
+      Handler: src/handlers.handle_graphql
+      Events:
+        ProxyApiPost:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /graphql
+            Method: post
+        ProxyApiGet:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /graphql
+            Method: get

@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  vars_files:
+  - ../../var/vars.yml
+  - ../../var/vars-test.yml
+
+  tasks:
+  - name: Generate API template
+    template:
+      src: "../../cloudformation/build-api.yml"
+      dest: "../../../build/dist/api-template.yml"

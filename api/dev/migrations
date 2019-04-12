@@ -1,0 +1,3 @@
+#!/usr/bin/env /bin/sh
+
+dev/compose run --rm -e DB_CONNECTION -e PYTHONPATH=. --entrypoint alembic app $@

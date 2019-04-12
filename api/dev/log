@@ -1,0 +1,3 @@
+#!/bin/sh
+
+dev/compose logs -f $@

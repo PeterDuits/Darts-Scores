@@ -1,0 +1,7 @@
+**/__pycache__/
+**/__pycache__/*
+**/tests/
+**/tests/*
+**/test_files/*
+**/*_test.py
+*_test.py

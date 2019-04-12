@@ -1,0 +1,69 @@
+Description: S3 buckets
+Outputs:
+  UploadBucket:
+    Description: Bucket name
+    Value: !Ref UploadBucket
+  WebBucket:
+    Description: WebBucket name
+    Value: !Ref WebBucket
+
+Parameters:
+  StackName:
+    Description: Stack name
+    Type: String
+  UploadBucketName:
+    Description: Bucket name
+    Type: String
+  WebBucketName:
+    Description: "Bucket name"
+    Type: String
+  DefaultRootObject:
+    Description: Bucket name
+    Type: String
+  DefaultErrorObject:
+    Description: Bucket name
+    Type: String
+
+Resources:
+  UploadBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      AccessControl: Private
+      BucketName: !Ref UploadBucketName
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+            AllowedOrigins:
+              - '*'
+            MaxAge: 3000
+      VersioningConfiguration:
+        Status: Enabled
+  WebBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Ref WebBucketName
+      WebsiteConfiguration:
+        IndexDocument: !Ref DefaultRootObject
+        ErrorDocument: !Ref DefaultErrorObject
+  WebBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref WebBucket
+                - /*
+      Bucket: !Ref WebBucket

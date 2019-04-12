@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+  - StackName: "{{ ResourceBaseName }}-aurora"
+
+  vars_files:
+  - ../../var/vars.yml
+  - ../../var/vars-test.yml
+  tasks:
+  - name: Running build-rds settings template
+    cloudformation:
+      # profile: "{{ Customer }}"
+      stack_name: "{{ StackName }}"
+      state: present
+      region: "{{ Region }}"
+      template: "../../cloudformation/build-aurora.yml"
+      template_parameters:
+        StackName: "{{ StackName }}"
+        DbCluster: "{{ DbCluster }}"
+        DbName: "{{ DbName }}"
+        DbUser: "{{ DbUser }}"
+        DbPassword: "{{ DbPassword }}"
+        DbMaxCapacity: "{{ DbMaxCapacity }}"
+        DbMinCapacity: "{{ DbMinCapacity }}"
+        DbAutoPause: "{{ DbAutoPause }}"
+        DbPauseTimeout: "{{ DbPauseTimeout }}"
+      tags:
+        Stackname: "{{ StackName }}"
+        Customer: "{{ Customer }}"
+        Environment: "{{ ResourceBaseName }}"
+        Project: "{{ Project }}"
+    register: rds
+

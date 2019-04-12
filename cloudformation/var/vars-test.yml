@@ -1,0 +1,10 @@
+---
+#
+# Global setup
+#
+Environment: "test"
+
+#
+# Database settings
+#
+DbPassword: "8GUHc9pvFVt2DtTp"

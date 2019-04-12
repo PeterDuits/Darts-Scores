@@ -1,0 +1,17 @@
+#!/usr/bin/env /bin/sh
+
+# install dependencies for IDE usage
+pipenv install --dev
+
+# spin up all containers
+dev/compose pull
+dev/compose up -d --build
+
+# wait a bit for the next step
+sleep 20
+
+# migrate and seed the database (for both connections)
+dev/migrations upgrade head
+# dev/seed
+DB_CONNECTION=test dev/migrations upgrade head
+# DB_CONNECTION=test dev/seed

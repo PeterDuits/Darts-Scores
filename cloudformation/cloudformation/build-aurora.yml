@@ -1,0 +1,43 @@
+Description: Aurora serverless settings
+Outputs:
+  ClusterEndpoint:
+    Description: Hostname
+    Value: !GetAtt Cluster.Endpoint.Address
+
+Parameters:
+  StackName:
+    Description: 'Stack Name'
+    Type: String
+  DbCluster:
+    Type: String
+  DbName:
+    Type: String
+  DbUser:
+    Type: String
+  DbPassword:
+    Type: String
+  DbMaxCapacity:
+    Type: String
+  DbMinCapacity:
+    Type: String
+  DbAutoPause:
+    Type: String
+  DbPauseTimeout:
+    Type: String
+
+Resources:
+  Cluster:
+    Properties:
+      DatabaseName: !Ref DbName
+      DBClusterIdentifier: !Ref DbCluster
+      Engine: aurora
+      EngineMode: serverless
+      EngineVersion:  5.6.10a
+      MasterUsername: !Ref DbUser
+      MasterUserPassword: !Ref DbPassword
+      ScalingConfiguration:
+        AutoPause: !Ref DbAutoPause
+        MaxCapacity: !Ref DbMaxCapacity
+        MinCapacity: !Ref DbMinCapacity
+        SecondsUntilAutoPause: !Ref DbPauseTimeout
+    Type: "AWS::RDS::DBCluster"
