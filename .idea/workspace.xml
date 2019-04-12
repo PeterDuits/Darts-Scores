@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d6d4476c-4323-473b-ad8f-ea916d42aa3d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/db/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/db/migrations/versions/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/entities/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/graphql/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/routes/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
-    </list>
+    <list default="true" id="d6d4476c-4323-473b-ad8f-ea916d42aa3d" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +20,15 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fe/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fe/src/components/app/AppToolbar.vue">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
@@ -91,41 +91,7 @@
             <path>
               <item name="Darts-Scores" type="b2602c69:ProjectViewProjectNode" />
               <item name="Darts-Scores" type="462c0819:PsiDirectoryNode" />
-              <item name="api" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Darts-Scores" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Darts-Scores" type="462c0819:PsiDirectoryNode" />
               <item name="fe" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Darts-Scores" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Darts-Scores" type="462c0819:PsiDirectoryNode" />
-              <item name="fe" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Darts-Scores" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Darts-Scores" type="462c0819:PsiDirectoryNode" />
-              <item name="fe" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Darts-Scores" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Darts-Scores" type="462c0819:PsiDirectoryNode" />
-              <item name="fe" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Darts-Scores" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Darts-Scores" type="462c0819:PsiDirectoryNode" />
-              <item name="fe" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -134,7 +100,8 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/api" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -335,6 +302,9 @@
     <entry file="file://$PROJECT_DIR$/fe/src/components/game/EndGame.vue">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/fe/src/components/app/AppToolbar.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/api/docker-compose.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
@@ -349,8 +319,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fe/src/components/app/AppToolbar.vue">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/fe/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
